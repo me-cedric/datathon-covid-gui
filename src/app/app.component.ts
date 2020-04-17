@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core'
-import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { Component, ViewChild, OnInit } from '@angular/core'
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { MatStep, MatStepper } from '@angular/material/stepper'
 
 @Component({
@@ -7,18 +7,28 @@ import { MatStep, MatStepper } from '@angular/material/stepper'
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  // File Types
+  allowedFileTypes = 'image/*,application/x-zip-compressed'
+
+  // form groupo to valdiate presence of file
+  imageFormGroup: FormGroup
+  // List of file
+  files: File[] = []
+  // Are we waiting for the results
+  loading = true
+  // Available checks
+  availableChecks: string[] = [
+    'Classification',
+    'Segmentation'
+  ]
+
   // Steppers
   @ViewChild('stepper') stepper: MatStepper
   @ViewChild('imageStep') imageStep: MatStep
   @ViewChild('resultStep') resultStep: MatStep
 
-  // form groupo to valdiate presence of file
-  imageFormGroup = new FormGroup({
-    files: new FormControl('', Validators.required)
-  })
-  // List of file
-  files: File[] = []
+  constructor(private formBuilder: FormBuilder) {}
 
   /**
    * Add a file
@@ -65,5 +75,14 @@ export class AppComponent {
 
   submit() {
 
+  }
+
+  ngOnInit() {
+    this.imageFormGroup = this.formBuilder.group({
+      files: ['', Validators.required]
+    })
+    this.imageFormGroup = this.formBuilder.group({
+      checkRadio: ['Classification', Validators.required]
+    })
   }
 }
