@@ -1,0 +1,29 @@
+@import '~@angular/material/theming';
+.app-header {
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+ngx-dropzone-label {
+  color: white;
+  background-color: rgb(160, 160, 160);
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+ngx-dropzone {
+  background-color: #333;
+  border: 5px dashed #c2185b;
+}
+.next-step {
+  margin-bottom: 15px;
+}
+ngx-dropzone-preview {
+  background-image: linear-gradient(to top,#424242,#434343,#444444,#454545,#464646);
+  &:hover {
+    background-image: linear-gradient(to top,#404040,#414141,#424242,#434343,#444444);
+  }
+}
