@@ -15,7 +15,6 @@ body {
   background: #303030;
 }
 
-
 .box {
   position: relative;
   top: 0;
@@ -142,4 +141,8 @@ $container-sizes: (
       }
     }
   }
+}
+
+.mat-progress-bar-buffer {
+  background-color: #f8bbd0;
 }

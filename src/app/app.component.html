@@ -37,15 +37,20 @@
                 >Click or drop your file(s) here</ngx-dropzone-label
               >
               <ng-container *ngFor="let f of files">
-                <ng-container *ngIf="isFileImage(f); else notAnImage">
+                <ng-container *ngIf="isFileImage(f.data); else notAnImage">
                   <ngx-dropzone-image-preview
                     [removable]="true"
-                    [file]="f"
+                    [file]="f.data"
                     (removed)="onRemove(f)"
                   >
-                    <ngx-dropzone-label
-                      >{{ f.name }} ({{ f.type }})</ngx-dropzone-label
-                    >
+                    <ngx-dropzone-label>
+                      {{ f.data.name }} ({{ f.data.type }})
+                      <mat-progress-bar
+                        mode="determinate"
+                        [value]="f.progress"
+                        *ngIf="f.inProgress"
+                      ></mat-progress-bar>
+                    </ngx-dropzone-label>
                   </ngx-dropzone-image-preview>
                 </ng-container>
                 <ng-template #notAnImage>
@@ -53,15 +58,19 @@
                     [removable]="true"
                     (removed)="onRemove(f)"
                   >
-                    <ngx-dropzone-label
-                      >{{ f.name }} ({{ f.type }})</ngx-dropzone-label
-                    >
+                    <ngx-dropzone-label>
+                      {{ f.data.name }} ({{ f.data.type }})
+                      <mat-progress-bar
+                        mode="determinate"
+                        [value]="f.progress"
+                        *ngIf="f.inProgress"
+                      ></mat-progress-bar>
+                    </ngx-dropzone-label>
                   </ngx-dropzone-preview>
                 </ng-template>
               </ng-container>
             </ngx-dropzone>
             <!-- Check choice -->
-            <!-- <mat-form-field> -->
             <mat-label id="radio-group-label">Type of check</mat-label>
             <mat-radio-group
               aria-labelledby="radio-group-label"
@@ -77,13 +86,12 @@
                 {{ check.label }}
               </mat-radio-button>
             </mat-radio-group>
-            <!-- </mat-form-field> -->
             <!-- Next -->
             <button
               color="primary"
               [disabled]="files.length === 0"
               mat-raised-button
-              matStepperNext
+              (click)="submit()"
             >
               Next
             </button>
