@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'https://file.io/'
+  serverUrl: 'https://file.io/',
+  uploadUrl: '',
+  segmentationUrl: '',
+  classificationUrl: ''
 }
 
 /*

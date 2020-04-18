@@ -12,20 +12,8 @@ interface FileMetadata {
   inProgress: boolean
   progress: number
 }
-
-/**
- * proper asynchrounous forEach
- * array
- * callback
- */
-const asyncForEach = async (
-  array: any[],
-  callback: (obj: any, index: number, array: any[]) => {}
-) => {
-  for (let index = 0; index < array.length; index++) {
-    // eslint-disable-next-line no-await-in-loop
-    await callback(array[index], index, array)
-  }
+interface ApiResults {
+  url: string
 }
 
 @Component({
@@ -35,7 +23,7 @@ const asyncForEach = async (
 })
 export class AppComponent implements OnInit {
   // File Types
-  allowedFileTypes = 'image/*,application/x-zip-compressed,.nii,.nii.gz'
+  allowedFileTypes = '.png,.jpg,.jpeg,.nii,.nii.gz'
 
   // form groupo to valdiate presence of file
   imageFormGroup: FormGroup
@@ -48,6 +36,8 @@ export class AppComponent implements OnInit {
     { label: 'Classification', value: 'classification' },
     { label: 'Segmentation', value: 'segmentation' }
   ]
+  // Api results
+  results: ApiResults[] = []
 
   // Steppers
   @ViewChild('stepper') stepper: MatStepper
@@ -122,15 +112,26 @@ export class AppComponent implements OnInit {
     })
     console.log(uploads)
     forkJoin(uploads).subscribe((events: any[]) => {
+      const resultingIds: string[] = []
       events.forEach((event) => {
         if (typeof event === 'object') {
+          if (event.id) {
+            resultingIds.push(event.id)
+          }
           console.log(event.body)
         }
       })
       this.stepper.next()
+      // Trigger the call to strat handling the images
+      const formData = new FormData()
+      formData.append('ids', JSON.stringify(resultingIds))
+      this.apiService.triggerModel(formData, this.fields.checkRadio.value).pipe(
+        map((event) => {}),
+        catchError((error: HttpErrorResponse) => {
+          return of(`Handling upload failed.`)
+        })
+      )
     })
-    // this.fields.checkRadio.value
-    // this.files
   }
 
   uploadFile(file: FileMetadata) {

@@ -1,4 +1,8 @@
 export const environment = {
   production: true,
-  serverUrl: 'https://file.io/' // tmp
+  // tmp
+  serverUrl: 'https://file.io/',
+  uploadUrl: '',
+  segmentationUrl: '',
+  classificationUrl: ''
 }
