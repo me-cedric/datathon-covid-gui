@@ -9,7 +9,7 @@
 }
 ngx-dropzone-label {
   color: white;
-  background-color: rgb(160, 160, 160);
+  background-color: rgb(105, 105, 105);
   border-radius: 5px;
   padding: 10px;
   box-sizing: border-box;
@@ -48,4 +48,22 @@ ngx-dropzone-preview {
 
 .radio-button {
   margin: 5px;
+}
+
+$scrollbarBG: #404040;
+$thumbBG: rgb(105, 105, 105);
+ngx-dropzone {
+  scrollbar-width: thin;
+  scrollbar-color: $thumbBG $scrollbarBG;
+  &::-webkit-scrollbar {
+    width: 11px;
+  }
+  &::-webkit-scrollbar-track {
+    background: $scrollbarBG;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $thumbBG;
+    border-radius: 6px;
+    border: 3px solid $scrollbarBG;
+  }
 }
