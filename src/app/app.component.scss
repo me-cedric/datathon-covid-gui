@@ -17,13 +17,35 @@ ngx-dropzone-label {
 ngx-dropzone {
   background-color: #333;
   border: 5px dashed #c2185b;
-}
-.next-step {
-  margin-top: 15px;
+  margin: 15px 0;
 }
 ngx-dropzone-preview {
-  background-image: linear-gradient(to top,#424242,#434343,#444444,#454545,#464646);
+  background-image: linear-gradient(
+    to top,
+    #424242,
+    #434343,
+    #444444,
+    #454545,
+    #464646
+  );
   &:hover {
-    background-image: linear-gradient(to top,#404040,#414141,#424242,#434343,#444444);
+    background-image: linear-gradient(
+      to top,
+      #404040,
+      #414141,
+      #424242,
+      #434343,
+      #444444
+    );
   }
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.radio-button {
+  margin: 5px;
 }

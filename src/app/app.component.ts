@@ -9,7 +9,7 @@ import { MatStep, MatStepper } from '@angular/material/stepper'
 })
 export class AppComponent implements OnInit {
   // File Types
-  allowedFileTypes = 'image/*,application/x-zip-compressed'
+  allowedFileTypes = 'image/*,application/x-zip-compressed,.nii,.nii.gz'
 
   // form groupo to valdiate presence of file
   imageFormGroup: FormGroup
@@ -18,15 +18,20 @@ export class AppComponent implements OnInit {
   // Are we waiting for the results
   loading = true
   // Available checks
-  availableChecks: string[] = [
-    'Classification',
-    'Segmentation'
+  availableChecks: { label: string; value: string }[] = [
+    { label: 'Classification', value: 'classification' },
+    { label: 'Segmentation', value: 'segmentation' }
   ]
 
   // Steppers
   @ViewChild('stepper') stepper: MatStepper
   @ViewChild('imageStep') imageStep: MatStep
   @ViewChild('resultStep') resultStep: MatStep
+
+  // Convenience getter for easy access to form fields
+  get fields() {
+    return this.imageFormGroup.controls
+  }
 
   constructor(private formBuilder: FormBuilder) {}
 
@@ -71,10 +76,11 @@ export class AppComponent implements OnInit {
     this.stepper.reset()
   }
 
-  isFileImage = (file: File) => (file && file.type.split('/')[0] === 'image')
+  isFileImage = (file: File) => file && file.type.split('/')[0] === 'image'
 
   submit() {
-
+    // this.fields.checkRadio.value
+    // this.files
   }
 
   ngOnInit() {
@@ -82,7 +88,7 @@ export class AppComponent implements OnInit {
       files: ['', Validators.required]
     })
     this.imageFormGroup = this.formBuilder.group({
-      checkRadio: ['Classification', Validators.required]
+      checkRadio: ['classification', Validators.required]
     })
   }
 }

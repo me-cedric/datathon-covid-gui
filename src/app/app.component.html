@@ -1,53 +1,103 @@
+<!-- Toolbar -->
 <mat-toolbar color="primary" class="app-header">
   <mat-toolbar-row>
     <span>COVID+</span>
   </mat-toolbar-row>
 </mat-toolbar>
+<!-- Page wrapper -->
 <div class="box-wrapper" fxLayout="row" fxLayoutAlign="center center">
+  <!-- Card centered -->
   <mat-card class="box">
+    <!-- Card header -->
     <mat-card-header>
       <mat-card-title>COVID+ checker</mat-card-title>
-      <mat-card-subtitle>Upload an image or a set of images in a compressed (.zip) folder</mat-card-subtitle>
+      <mat-card-subtitle
+        >Upload an image or a set of images in a compressed (.zip)
+        folder</mat-card-subtitle
+      >
     </mat-card-header>
+    <!-- Content -->
     <mat-card-content>
       <mat-vertical-stepper linear #stepper>
-        <mat-step [stepControl]="imageFormGroup" fxLayout="column" fxLayoutAlign="center" #imageStep>
+        <!-- Step 1: Upload -->
+        <mat-step
+          [stepControl]="imageFormGroup"
+          fxLayout="column"
+          fxLayoutAlign="center"
+          #imageStep
+        >
           <form [formGroup]="imageFormGroup">
             <ng-template matStepLabel>Upload an image</ng-template>
-            <ngx-dropzone (change)="onSelect($event)" [accept]="allowedFileTypes">
-              <ngx-dropzone-label>Click or drop your file(s) here</ngx-dropzone-label>
+            <!-- Dropzone -->
+            <ngx-dropzone
+              (change)="onSelect($event)"
+              [accept]="allowedFileTypes"
+            >
+              <ngx-dropzone-label
+                >Click or drop your file(s) here</ngx-dropzone-label
+              >
               <ng-container *ngFor="let f of files">
                 <ng-container *ngIf="isFileImage(f); else notAnImage">
-                  <ngx-dropzone-image-preview [removable]="true" [file]="f" (removed)="onRemove(f)">
-                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                  <ngx-dropzone-image-preview
+                    [removable]="true"
+                    [file]="f"
+                    (removed)="onRemove(f)"
+                  >
+                    <ngx-dropzone-label
+                      >{{ f.name }} ({{ f.type }})</ngx-dropzone-label
+                    >
                   </ngx-dropzone-image-preview>
                 </ng-container>
                 <ng-template #notAnImage>
-                  <ngx-dropzone-preview [removable]="true" (removed)="onRemove(f)">
-                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                  <ngx-dropzone-preview
+                    [removable]="true"
+                    (removed)="onRemove(f)"
+                  >
+                    <ngx-dropzone-label
+                      >{{ f.name }} ({{ f.type }})</ngx-dropzone-label
+                    >
                   </ngx-dropzone-preview>
                 </ng-template>
               </ng-container>
             </ngx-dropzone>
+            <!-- Check choice -->
             <!-- <mat-form-field> -->
-              <mat-label>Type of check</mat-label>
-              <mat-radio-group formControlName="checkRadio">
-                <mat-radio-button class="example-radio-button" *ngFor="let check of availableChecks" [value]="check">
-                  {{check}}
-                </mat-radio-button>
-              </mat-radio-group>
+            <mat-label id="radio-group-label">Type of check</mat-label>
+            <mat-radio-group
+              aria-labelledby="radio-group-label"
+              class="radio-group"
+              formControlName="checkRadio"
+            >
+              <mat-radio-button
+                color="primary"
+                class="radio-button"
+                *ngFor="let check of availableChecks"
+                [value]="check.value"
+              >
+                {{ check.label }}
+              </mat-radio-button>
+            </mat-radio-group>
             <!-- </mat-form-field> -->
-            <button color="primary" class="next-step" [disabled]="files.length === 0" mat-raised-button matStepperNext>Next</button>
+            <!-- Next -->
+            <button
+              color="primary"
+              [disabled]="files.length === 0"
+              mat-raised-button
+              matStepperNext
+            >
+              Next
+            </button>
           </form>
         </mat-step>
+        <!-- Step 2: Results -->
         <mat-step #resultStep>
           <ng-template matStepLabel>Result</ng-template>
+          <!-- Loder if nothing has been received yet -->
           <ng-container *ngIf="loading; else loadedTemplate">
             <mat-spinner color="secondary" diameter="30"></mat-spinner>
           </ng-container>
-          <ng-template #loadedTemplate>
-
-          </ng-template>
+          <!-- Results -->
+          <ng-template #loadedTemplate> </ng-template>
           <div>
             <button mat-button matStepperPrevious>Back</button>
             <button mat-raised-button (click)="reset()">Reset</button>
