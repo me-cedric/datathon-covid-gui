@@ -58,11 +58,11 @@ export class AppComponent implements OnInit {
    */
   validate() {
     if (this.files.length > 0) {
-      this.imageFormGroup.setValue({
+      this.imageFormGroup.patchValue({
         files: true
       })
     } else {
-      this.imageFormGroup.setValue({
+      this.imageFormGroup.patchValue({
         files: null
       })
     }
