@@ -11,9 +11,6 @@ export class ApiService {
   UPLOAD_URL = env.uploadUrl || ''
   SEGMENTATION_URL = env.segmentationUrl || ''
   CLASSIFICATION_URL = env.classificationUrl || ''
-  headersObject: HttpHeaders = new HttpHeaders({
-    Authorization: `Basic ${btoa(env.apiBasicAuth)}`
-  })
 
   constructor(private httpClient: HttpClient) {}
 
@@ -23,8 +20,7 @@ export class ApiService {
       formData,
       {
         reportProgress: true,
-        observe: 'events',
-        headers: this.headersObject
+        observe: 'events'
       }
     )
   }
@@ -39,8 +35,7 @@ export class ApiService {
         ? this.SEGMENTATION_URL
         : this.CLASSIFICATION_URL)
     return this.httpClient.post<any>(uri, formData, {
-      observe: 'events',
-      headers: this.headersObject
+      observe: 'events'
     })
   }
 }

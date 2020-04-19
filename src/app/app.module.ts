@@ -2,12 +2,13 @@ import { BrowserModule } from '@angular/platform-browser'
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { FlexLayoutModule } from '@angular/flex-layout'
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgxDropzoneModule } from 'ngx-dropzone'
 
 import { AppComponent } from './app.component'
 import { MaterialModule } from './shared/material.module'
+import { AuthInterceptor } from './shared/intercetors/auth.interceptor'
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,13 @@ import { MaterialModule } from './shared/material.module'
     FlexLayoutModule,
     MaterialModule,
     NgxDropzoneModule
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
