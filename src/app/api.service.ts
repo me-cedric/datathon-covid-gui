@@ -11,15 +11,11 @@ export class ApiService {
   UPLOAD_URL = env.uploadUrl || ''
   SEGMENTATION_URL = env.segmentationUrl || ''
   CLASSIFICATION_URL = env.classificationUrl || ''
-  headersObject: HttpHeaders = new HttpHeaders()
+  headersObject: HttpHeaders = new HttpHeaders({
+    Authorization: `Basic ${btoa(env.apiBasicAuth)}`
+  })
 
-  constructor(private httpClient: HttpClient) {
-    this.headersObject.append('Content-Type', 'application/json')
-    this.headersObject.append(
-      'Authorization',
-      `Basic ${btoa(env.apiBasicAuth)}`
-    )
-  }
+  constructor(private httpClient: HttpClient) {}
 
   public upload(formData: FormData) {
     return this.httpClient.post<any>(
