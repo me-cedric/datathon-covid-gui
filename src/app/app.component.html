@@ -126,13 +126,13 @@
                 <img [src]="image.source" alt="source image" />
                 <img [src]="image.result" alt="result image" />
                 <mat-table
-                  [dataSource]="image.metadata"
+                  [dataSource]="dataSourcer(image.metadata)"
                   class="mat-elevation-z8"
                 >
                   <!-- Position Column -->
                   <ng-container
                     [matColumnDef]="col"
-                    *ngFor="let col of metaColumns(image.metadata)"
+                    *ngFor="let col of ['type', 'value']"
                   >
                     <mat-header-cell *matHeaderCellDef>
                       {{ col }}
@@ -143,10 +143,10 @@
                   </ng-container>
 
                   <mat-header-row
-                    *matHeaderRowDef="metaColumns(image.metadata)"
+                    *matHeaderRowDef="['type', 'value']"
                   ></mat-header-row>
                   <mat-row
-                    *matRowDef="let row; columns: metaColumns(image.metadata)"
+                    *matRowDef="let row; columns: ['type', 'value']"
                   ></mat-row>
                 </mat-table>
               </ng-container>

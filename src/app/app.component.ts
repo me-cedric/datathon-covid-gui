@@ -89,6 +89,16 @@ export class AppComponent implements OnInit {
     return col
   }
 
+  dataSourcer(metadata: { [x: string]: any }) {
+    const data = []
+    if (metadata) {
+      Object.keys(metadata).forEach((meta) => {
+        data.push({ type: meta, value: metadata[meta] })
+      })
+    }
+    return data
+  }
+
   /**
    * Add a file
    * event: { addedFiles: any }

@@ -25,6 +25,7 @@ body {
   border-radius: 10px;
   z-index: 5;
   max-width: 80vw;
+  max-height: 80vh;
   &.back {
     transform: scale(0.95);
     -webkit-transform: scale(0.95);
