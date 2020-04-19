@@ -102,11 +102,29 @@
         <mat-step #resultStep>
           <ng-template matStepLabel>Result</ng-template>
           <!-- Loder if nothing has been received yet -->
-          <ng-container *ngIf="loading; else loadedTemplate">
-            <mat-spinner color="secondary" diameter="30"></mat-spinner>
-          </ng-container>
+          <mat-progress-bar
+            mode="indeterminate"
+            *ngIf="loading"
+          ></mat-progress-bar>
           <!-- Results -->
-          <ng-template #loadedTemplate> </ng-template>
+          <mat-accordion class="headers-align" *ngIf="results.length > 0">
+            <mat-expansion-panel
+              [expanded]="step === i"
+              (opened)="setStep(i)"
+              *ngFor="let result of results; let i = index"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title> Case {{ i }} </mat-panel-title>
+                <mat-panel-description>
+                  {{ algoType(result.algotype) }}
+                </mat-panel-description>
+                <ng-container *ngFor="let image of result.results">
+                  <img [src]="image.source" alt="source image" />
+                  <img [src]="image.result" alt="result image" />
+                </ng-container>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+          </mat-accordion>
           <div>
             <button mat-button matStepperPrevious>Back</button>
             <button mat-raised-button (click)="reset()">Reset</button>

@@ -13,7 +13,14 @@ interface FileMetadata {
   progress: number
 }
 interface ApiResults {
-  url: string
+  pk: string
+  algotype: 'classification' | 'segmentation'
+  value: boolean
+  results: {
+    source: string
+    result: string
+    metadata: any
+  }
 }
 
 @Component({
@@ -39,6 +46,7 @@ export class AppComponent implements OnInit {
   // Api results
   results: ApiResults[] = []
   statusTimer: Subscription
+  step = 0
 
   // Steppers
   @ViewChild('stepper') stepper: MatStepper
@@ -50,10 +58,27 @@ export class AppComponent implements OnInit {
     return this.imageFormGroup.controls
   }
 
+  algoType(algoValue: string) {
+    const filtered = this.availableChecks.filter(
+      (algo) => algo.value === algoValue
+    )
+    return filtered[0] ? filtered[0].label : ''
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private apiService: ApiService
   ) {}
+
+  setStep(index: number) {
+    this.step = index
+  }
+  nextStep() {
+    this.step++
+  }
+  prevStep() {
+    this.step--
+  }
 
   /**
    * Add a file
@@ -108,6 +133,7 @@ export class AppComponent implements OnInit {
 
   submit() {
     const uploads = []
+    this.results = []
     this.files.forEach((meta: FileMetadata) => {
       uploads.push(this.uploadFile(meta))
     })
@@ -115,6 +141,7 @@ export class AppComponent implements OnInit {
       const resultingIds: string[] = []
       events.forEach((event) => {
         if (typeof event === 'object' && event.body) {
+          console.log(event.body)
           if (Array.isArray(event.body)) {
             resultingIds.push(event.body.map((medFile) => medFile.pk))
           } else {
@@ -139,7 +166,7 @@ export class AppComponent implements OnInit {
           })
         )
         .subscribe((evts: any) => {
-          if (evts) {
+          if (evts && evts.body) {
             console.log(evts)
             this.statusTimer = timer(2000, 5000).subscribe((t) => {
               const idsData = new FormData()
@@ -165,6 +192,7 @@ export class AppComponent implements OnInit {
                     const stopCheckIds = []
                     e.body.forEach((status: any) => {
                       if (status.value) {
+                        this.results.push(status.results)
                         console.log(status.results)
                         stopCheckIds.push(status.pk)
                       }
