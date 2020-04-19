@@ -129,12 +129,17 @@ export class AppComponent implements OnInit {
         .triggerModel(formData, this.fields.checkRadio.value)
         .pipe(
           map((event: any) => {
-            console.log(event.body)
+            if (event.type === HttpEventType.Response) {
+              return event
+            }
           }),
           catchError((error: HttpErrorResponse) => {
             return of(`Handling upload failed.`)
           })
         )
+        .subscribe((evts: any[]) => {
+          console.log(evts)
+        })
     })
   }
 

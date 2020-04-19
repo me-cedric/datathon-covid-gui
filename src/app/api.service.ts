@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core'
-import {
-  HttpClient,
-  HttpEvent,
-  HttpErrorResponse,
-  HttpEventType,
-  HttpHeaders
-} from '@angular/common/http'
-import { map } from 'rxjs/operators'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 import { environment as env } from '../environments/environment'
 
@@ -18,8 +11,15 @@ export class ApiService {
   UPLOAD_URL = env.uploadUrl || ''
   SEGMENTATION_URL = env.segmentationUrl || ''
   CLASSIFICATION_URL = env.classificationUrl || ''
+  headersObject: HttpHeaders = new HttpHeaders()
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) {
+    this.headersObject.append('Content-Type', 'application/json')
+    this.headersObject.append(
+      'Authorization',
+      `Basic ${btoa(env.apiBasicAuth)}`
+    )
+  }
 
   public upload(formData: FormData) {
     return this.httpClient.post<any>(
@@ -27,7 +27,8 @@ export class ApiService {
       formData,
       {
         reportProgress: true,
-        observe: 'events'
+        observe: 'events',
+        headers: this.headersObject
       }
     )
   }
@@ -42,8 +43,8 @@ export class ApiService {
         ? this.SEGMENTATION_URL
         : this.CLASSIFICATION_URL)
     return this.httpClient.post<any>(uri, formData, {
-      reportProgress: true,
-      observe: 'events'
+      observe: 'events',
+      headers: this.headersObject
     })
   }
 }
