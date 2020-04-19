@@ -125,6 +125,30 @@
               <ng-container *ngFor="let image of result.results">
                 <img [src]="image.source" alt="source image" />
                 <img [src]="image.result" alt="result image" />
+                <mat-table
+                  [dataSource]="image.metadata"
+                  class="mat-elevation-z8"
+                >
+                  <!-- Position Column -->
+                  <ng-container
+                    [matColumnDef]="col"
+                    *ngFor="let col of metaColumns(image.metadata)"
+                  >
+                    <mat-header-cell *matHeaderCellDef>
+                      {{ col }}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element[col] }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row
+                    *matHeaderRowDef="metaColumns(image.metadata)"
+                  ></mat-header-row>
+                  <mat-row
+                    *matRowDef="let row; columns: metaColumns(image.metadata)"
+                  ></mat-row>
+                </mat-table>
               </ng-container>
               <mat-action-row>
                 <button

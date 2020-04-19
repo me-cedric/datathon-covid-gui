@@ -59,17 +59,17 @@ export class AppComponent implements OnInit {
     return this.imageFormGroup.controls
   }
 
+  constructor(
+    private formBuilder: FormBuilder,
+    private apiService: ApiService
+  ) {}
+
   algoType(algoValue: string) {
     const filtered = this.availableChecks.filter(
       (algo) => algo.value === algoValue
     )
     return filtered[0] ? filtered[0].label : ''
   }
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private apiService: ApiService
-  ) {}
 
   setStep(index: number) {
     this.step = index
@@ -79,6 +79,14 @@ export class AppComponent implements OnInit {
   }
   prevStep() {
     this.step--
+  }
+
+  metaColumns(metadata: {}): string[] {
+    let col = []
+    if (metadata) {
+      col = Object.keys(metadata)
+    }
+    return col
   }
 
   /**
