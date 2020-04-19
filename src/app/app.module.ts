@@ -10,9 +10,7 @@ import { AppComponent } from './app.component'
 import { MaterialModule } from './shared/material.module'
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -23,8 +21,7 @@ import { MaterialModule } from './shared/material.module'
     MaterialModule,
     NgxDropzoneModule
   ],
-  providers: [],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AppModule { }
+export class AppModule {}

@@ -110,33 +110,38 @@ export class AppComponent implements OnInit {
     this.files.forEach((meta: FileMetadata) => {
       uploads.push(this.uploadFile(meta))
     })
-    console.log(uploads)
     forkJoin(uploads).subscribe((events: any[]) => {
       const resultingIds: string[] = []
       events.forEach((event) => {
-        if (typeof event === 'object') {
-          if (event.id) {
-            resultingIds.push(event.id)
+        if (typeof event === 'object' && event.body) {
+          if (Array.isArray(event.body)) {
+            resultingIds.push(event.body.map((medFile) => medFile.pk))
+          } else {
+            resultingIds.push(event.body.pk)
           }
-          console.log(event.body)
         }
       })
       this.stepper.next()
       // Trigger the call to strat handling the images
       const formData = new FormData()
       formData.append('ids', JSON.stringify(resultingIds))
-      this.apiService.triggerModel(formData, this.fields.checkRadio.value).pipe(
-        map((event) => {}),
-        catchError((error: HttpErrorResponse) => {
-          return of(`Handling upload failed.`)
-        })
-      )
+      return this.apiService
+        .triggerModel(formData, this.fields.checkRadio.value)
+        .pipe(
+          map((event: any) => {
+            console.log(event.body)
+          }),
+          catchError((error: HttpErrorResponse) => {
+            return of(`Handling upload failed.`)
+          })
+        )
     })
   }
 
   uploadFile(file: FileMetadata) {
     const formData = new FormData()
     formData.append('file', file.data)
+    formData.append('algorithm', this.fields.checkRadio.value)
     file.inProgress = true
     return this.apiService.upload(formData).pipe(
       map((event) => {
