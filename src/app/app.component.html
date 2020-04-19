@@ -106,6 +106,9 @@
             mode="indeterminate"
             *ngIf="loading"
           ></mat-progress-bar>
+          <mat-error *ngIf="error !== ''">
+            {{ error }}
+          </mat-error>
           <!-- Results -->
           <mat-accordion class="headers-align" *ngIf="results.length > 0">
             <mat-expansion-panel

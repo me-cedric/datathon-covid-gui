@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
   results: ApiResults[] = []
   statusTimer: Subscription
   step = 0
+  error = ''
 
   // Steppers
   @ViewChild('stepper') stepper: MatStepper
@@ -134,6 +135,8 @@ export class AppComponent implements OnInit {
   submit() {
     const uploads = []
     this.results = []
+    this.loading = true
+    this.error = ''
     this.files.forEach((meta: FileMetadata) => {
       uploads.push(this.uploadFile(meta))
     })
@@ -162,6 +165,8 @@ export class AppComponent implements OnInit {
             }
           }),
           catchError((error: HttpErrorResponse) => {
+            this.loading = false
+            this.error = 'Handling upload failed.'
             return of(`Handling upload failed.`)
           })
         )
@@ -184,7 +189,9 @@ export class AppComponent implements OnInit {
                     }
                   }),
                   catchError((error: HttpErrorResponse) => {
-                    return of(`Handling upload failed.`)
+                    this.loading = false
+                    this.error = 'Getting results failed.'
+                    return of(`Getting results failed.`)
                   })
                 )
                 .subscribe((e: any) => {
@@ -192,8 +199,7 @@ export class AppComponent implements OnInit {
                     const stopCheckIds = []
                     e.body.forEach((status: any) => {
                       if (status.value) {
-                        this.results.push(status.results)
-                        console.log(status.results)
+                        this.results.push(status)
                         stopCheckIds.push(status.pk)
                       }
                     })
@@ -202,6 +208,7 @@ export class AppComponent implements OnInit {
                     )
                     if (evts.body.length === 0) {
                       this.statusTimer.unsubscribe()
+                      this.loading = false
                     }
                   }
                 })
