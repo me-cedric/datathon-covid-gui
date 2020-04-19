@@ -19,7 +19,7 @@ export class AuthInterceptor implements HttpInterceptor {
       setHeaders: {
         'Content-Type': 'application/json; charset=utf-8',
         Accept: 'application/json',
-        Authorization: `Bearer ${btoa(env.apiBasicAuth)}`
+        Authorization: `Basic ${btoa(env.apiBasicAuth)}`
       }
     })
 
