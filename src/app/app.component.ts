@@ -139,11 +139,14 @@ export class AppComponent implements OnInit {
           })
         )
         .subscribe((evts: any) => {
-          console.log(evts)
           if (evts) {
-            this.statusTimer = timer(2000, 1000).subscribe((t) => {
+            console.log(evts)
+            this.statusTimer = timer(2000, 5000).subscribe((t) => {
               const idsData = new FormData()
-              idsData.append('ids', JSON.stringify(evts.body))
+              idsData.append(
+                'statusKeys',
+                JSON.stringify(evts.body.map((status: any) => status.pk))
+              )
               this.apiService
                 .checkStatus(idsData)
                 .pipe(
@@ -158,7 +161,21 @@ export class AppComponent implements OnInit {
                   })
                 )
                 .subscribe((e: any) => {
-                  this.statusTimer.unsubscribe()
+                  if (e && e.body) {
+                    const stopCheckIds = []
+                    e.body.forEach((status: any) => {
+                      if (status.value) {
+                        console.log(status.results)
+                        stopCheckIds.push(status.pk)
+                      }
+                    })
+                    evts.body = evts.body.filter(
+                      (stat: any) => !stopCheckIds.includes(stat.pk)
+                    )
+                    if (evts.body.length === 0) {
+                      this.statusTimer.unsubscribe()
+                    }
+                  }
                 })
             })
           }
