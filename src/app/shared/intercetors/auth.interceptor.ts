@@ -17,8 +17,6 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     req = req.clone({
       setHeaders: {
-        'Content-Type': 'application/json; charset=utf-8',
-        Accept: 'application/json',
         Authorization: `Basic ${btoa(env.apiBasicAuth)}`
       }
     })

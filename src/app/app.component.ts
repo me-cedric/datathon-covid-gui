@@ -5,7 +5,7 @@ import { MatStep, MatStepper } from '@angular/material/stepper'
 import { ApiService } from './api.service'
 import { map, catchError } from 'rxjs/operators'
 import { HttpErrorResponse, HttpEventType } from '@angular/common/http'
-import { of, forkJoin } from 'rxjs'
+import { of, forkJoin, timer, Subscription } from 'rxjs'
 
 interface FileMetadata {
   data: File
@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
   ]
   // Api results
   results: ApiResults[] = []
+  statusTimer: Subscription
 
   // Steppers
   @ViewChild('stepper') stepper: MatStepper
@@ -137,8 +138,30 @@ export class AppComponent implements OnInit {
             return of(`Handling upload failed.`)
           })
         )
-        .subscribe((evts: any[]) => {
+        .subscribe((evts: any) => {
           console.log(evts)
+          if (evts) {
+            this.statusTimer = timer(2000, 1000).subscribe((t) => {
+              const idsData = new FormData()
+              idsData.append('ids', JSON.stringify(evts.body))
+              this.apiService
+                .checkStatus(idsData)
+                .pipe(
+                  map((event: any) => {
+                    if (event.type === HttpEventType.Response) {
+                      console.log(event)
+                      return event
+                    }
+                  }),
+                  catchError((error: HttpErrorResponse) => {
+                    return of(`Handling upload failed.`)
+                  })
+                )
+                .subscribe((e: any) => {
+                  this.statusTimer.unsubscribe()
+                })
+            })
+          }
         })
     })
   }

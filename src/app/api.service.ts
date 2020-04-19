@@ -9,6 +9,7 @@ import { environment as env } from '../environments/environment'
 export class ApiService {
   SERVER_URL = env.serverUrl || 'https://file.io/'
   UPLOAD_URL = env.uploadUrl || ''
+  STATUS_URL = env.statusUrl || ''
   SEGMENTATION_URL = env.segmentationUrl || ''
   CLASSIFICATION_URL = env.classificationUrl || ''
 
@@ -34,6 +35,13 @@ export class ApiService {
       (checkType === 'segmentation'
         ? this.SEGMENTATION_URL
         : this.CLASSIFICATION_URL)
+    return this.httpClient.post<any>(uri, formData, {
+      observe: 'events'
+    })
+  }
+
+  public checkStatus(formData: FormData) {
+    const uri = this.SERVER_URL + this.STATUS_URL
     return this.httpClient.post<any>(uri, formData, {
       observe: 'events'
     })
