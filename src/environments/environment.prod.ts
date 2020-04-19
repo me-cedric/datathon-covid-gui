@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  serverUrl: 'https://gpuvm1v100.eastus.cloudapp.azure.com/',
+  serverUrl: 'https://gpuvm1v100.eastus.cloudapp.azure.com/api/',
   uploadUrl: 'upload',
   segmentationUrl: 'segmentation',
   classificationUrl: 'classification',

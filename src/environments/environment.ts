@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  // serverUrl: 'http://localhost:8000/',
-  serverUrl: 'https://gpuvm1v100.eastus.cloudapp.azure.com/',
+  // serverUrl: 'http://localhost:8000/api/',
+  serverUrl: 'https://gpuvm1v100.eastus.cloudapp.azure.com/api/',
   uploadUrl: 'upload',
   segmentationUrl: 'segmentation',
   classificationUrl: 'classification',
