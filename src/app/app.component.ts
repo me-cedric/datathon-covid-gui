@@ -30,7 +30,7 @@ interface ApiResults {
 })
 export class AppComponent implements OnInit {
   // File Types
-  allowedFileTypes = '.png,.jpg,.jpeg,.nii,.nii.gz'
+  allowedFileTypes = '.png,.jpg,.jpeg,.nii,.nii.gz,.dcm.gz,.dcm'
 
   // form groupo to valdiate presence of file
   imageFormGroup: FormGroup
